@@ -1,3 +1,4 @@
+';' very important.The if, while, etc. statements are adapted to the first line below; multiple lines require the addition of {}.
 EOF = -1
 Separate ';' is a empty statement.It can used to be more eye-catching.
 '\n' in ASCLL is 10.
