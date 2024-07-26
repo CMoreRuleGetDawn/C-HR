@@ -1,3 +1,70 @@
 //编写一个统计空格，制表符和换行符的程序。
 //编写一个将输入复制到输出的程序，并将其中连续的多个空格用一个空格代替。
 //编写一个将输入复制到输出的程序，并将其中的制表符替换为\t，把回退符替换为\b，把反斜杠替换为\\，并显示出来。
+
+#include <stdio.h>
+#include <stdlib.h>
+//#include <malloc.h>
+int main()
+{
+    int c, count_t = 0, count_b = 0, count_sp = 0;
+    int size = 5;
+    int* array = (int*)malloc(size * sizeof(int));
+    int i = 0;
+    if (array == NULL) {
+        printf("Memory allocation failed.\n");
+        return 1;
+    }
+    //编写一个统计空格，制表符和换行符的程序。
+    printf("enter your texts: \n");
+    while ((c = getchar()) != EOF)
+    {
+        if (c == ' ')
+            ++count_sp;
+
+        if (c == '\t')
+            ++count_t;
+
+        if (c == '\n')
+            ++count_b;
+
+        array[i] = c;
+        i++;
+    }
+
+
+
+    printf("___________________________________\n");
+    printf("test texts are: \n");
+    for (int j = 0; j < i; j++)
+    {
+        if (array[j] != EOF)
+            putchar(array[j]);
+    }
+    //编写一个将输入复制到输出的程序，并将其中连续的多个空格用一个空格代替。
+    printf("after eliminate multiple consecutive spaces:\n");
+    for (int j = 0; j < i; j++)
+    {
+        if (array[j] != ' ' || array[j + 1] != ' ')
+        {
+            if (array[j] != EOF)
+                putchar(array[j]);
+        }
+    }
+    //编写一个将输入复制到输出的程序，并将其中的制表符替换为\t，把回退符替换为\b，把反斜杠替换为\\，并显示出来。
+    printf("Replaced texts:\n");
+    for (int j = 0; j < i; j++)
+    {
+        if (array[j] == '\t')         
+            printf("\\t");
+        if (array[j] == '\b')
+            printf("\\b");
+        if (array[j] == '\\')
+            printf("\\\\");
+        else
+            putchar(array[j]);
+    }
+    printf("\n");
+    printf("Amount of Space:%d, Table:%d, Return:%d ", count_sp, count_t, count_b);
+    free(array);
+}
