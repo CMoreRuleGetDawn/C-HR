@@ -70,3 +70,27 @@ int main()
 }
 ---------------------------------------------------------------------------------------------------------------------
 //1-12 编写一个程序，以每行一个单词的形式打印其输出
+
+#include <stdio.h>
+#define OUT 0
+#define IN 1
+void main() {
+	int c;
+	int state = OUT;
+	printf("please enter your texts:\n");
+	while ((c = getchar()) != EOF)
+	{
+		if (c == ' ' || c == '\t' || c == '\n')
+		{
+			state = OUT;
+		}
+		else if (state == OUT || state == IN)
+		{
+			if ((state - IN) == -1)
+				putchar('\n');
+			state = IN;
+			putchar(c);
+		}
+
+	}
+}
