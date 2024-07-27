@@ -168,3 +168,82 @@ main()
         printf(" %ld", i);
     printf(" 10+\n");
 }
+---------------------------------------------------------------------------------------------------
+//1-14 编写一个程序，打印输入中各个字符出现频度的直方图
+
+#include <stdio.h>
+
+int main() {
+	int c = 0;
+	int other=0,dig = 0;
+	int arr[28];
+	for (int i = 0; i < 28; i++)
+		arr[i] = 0;
+	
+	//输入测试用例
+	while ((c = getchar()) != EOF) {
+		if (c == ' ' || c == '\t' || c == '\n') {
+			other++;
+		}
+			
+		if (48 <= c && c <= 57){
+			dig++;
+		}
+			
+		if (97 <= c && c <= 122) {
+			for (int i = 0; i < 26; i++) {
+				if ((c - 97) == i) {
+					arr[i]++;
+					break;
+				}
+
+			}
+		}
+		else if (65 <= c && c <= 90) {
+			for (int i = 0; i < 26; i++) {
+				if ((c - 65) == i) {
+					arr[i]++;
+					break;
+				}
+
+			}
+		}
+	}
+	arr[26] = other;
+	arr[27] = dig;
+	//计算最高频度
+	int temp = 0;
+	for (int i = 0; i < 28; i++) {
+		temp = arr[0];
+		if (arr[i] >= temp)
+			temp = arr[i];
+	}
+
+	//打印频度直方图
+	printf("\n             频度图                 \n");
+	printf("     A\n     |\n");
+	for (int i = temp; i > 0; i--) {
+		printf("%4d |",i);
+		for (int j = 0; j < 28; j++) {
+			if (arr[j] == i) {
+				printf("  #");
+				arr[j] = arr[j] - 1;
+			}
+			else
+				printf("   ");
+		}
+		printf("\n");
+
+	}
+	printf("     +");
+	for(int n=0;n<=45;n++)
+		printf("--");//
+	printf("->\n      ");
+	for (int k = 97; k <= 122; k++) {
+		printf("  ");
+		putchar(k);
+	}
+	printf(" ot");
+	printf(" di");
+		
+}
