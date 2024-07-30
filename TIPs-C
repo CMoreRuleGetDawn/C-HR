@@ -2,4 +2,4 @@
 EOF = -1;NULL = 0
 Separate ';' is a empty statement.It can used to be more eye-catching.
 '\n' in ASCLL is 10.
-
+Use extern to states external variables.If the functions are under the external variables and in the same file, it does not need to use extern.
