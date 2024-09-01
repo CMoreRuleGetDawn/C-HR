@@ -271,3 +271,104 @@ void FaToCe(int fa) {
 	celsius = 5 * (fa - 32) / 9;
 	printf("%d\t%d\n",fa,celsius);
 }
+---------------------------------------------------------------------------------------------------
+//1-16 修改打印最长文本行的程序的主程序main,使之可以打印任意长度的输入行的长度，并尽可能多的打印文本。（如果是需要打印每行的字符数且打印每一行，那就非常简单）
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXLINE 1000
+
+int getline(char line[], int maxline);
+void copy(char to[], char from[]);
+
+int main() {
+    int len, max = 0;
+    int newsize = 0;
+    int acount = 0;//动态分配的数组的下标
+    int temp = 0;
+    char line[MAXLINE];
+    char longest[MAXLINE];
+
+    char* longp = (char*)malloc(MAXLINE * sizeof(char));
+    char* linep = (char*)malloc(MAXLINE * sizeof(char));
+
+    if (longp == NULL || linep == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
+    
+    while ((len = getline(line, MAXLINE)) > 0) {
+       //计算输入行的字符数是否超过保存输入行内容的数组，数组空间不足则动态分配更多的内存
+       //直至数组空间足够保存输入的输入行的每个字符，以实现打印任意长度输入行。
+        if (len == (MAXLINE - 1) && line[MAXLINE - 2] != '\n') {
+            newsize = newsize + 1100;
+            linep = (char*)realloc(linep, newsize * sizeof(char));
+            if (linep == NULL) {
+                fprintf(stderr, "Memory reallocation failed\n");
+                return 1;
+            }
+            for (int i = 0; i < len; i++) {
+                linep[acount] = line[i];
+                acount++;
+            }
+            if (linep[acount - 1] != '\n');
+                continue;    
+        }
+        else {
+            for (int i = 0; i < len; i++) {
+                linep[acount] = line[i];
+                acount++;
+            }
+            linep[acount] = '\0';
+            temp = acount;
+            acount = 0;
+        }
+        //判断临时保存最长行的数组够不够长，如果不足则适配长度动态分配
+        if (temp - 1 > max) {
+            max = temp - 1;
+            if (temp > sizeof(char)*MAXLINE) {
+                longp = (char*)realloc(longest, (max + 1) * sizeof(char));
+                if (longp == NULL) {
+                    fprintf(stderr, "Memory reallocation failed\n");
+                    return 1;
+                }
+            }
+        copy(longp, linep);
+     
+        }
+              
+    }
+    if(max>0)
+        printf("%s", longp);
+        
+    free(linep);//释放内存
+    free(longp);//释放内存
+    return 0;
+
+        
+}
+
+
+    
+
+
+int getline(char s[], int lim) {
+    int c, i;
+    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i) {
+        s[i] = c;
+    }
+    if (c == '\n') {
+        s[i] = c;
+        ++i;
+    }
+    s[i] = '\0';
+    return i;
+}
+
+void copy(char to[], char from[]) {
+    int i = 0;
+    while ((to[i] = from[i]) != '\0') {
+        ++i;
+    }
+}
+---------------------------------------------------------------------------------------------------
+//1-17 
