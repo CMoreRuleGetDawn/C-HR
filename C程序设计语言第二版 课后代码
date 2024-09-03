@@ -443,3 +443,75 @@ int copy(char* to, char* from,int index) {
 	
 	return 1;
 }
+---------------------------------------------------------------------------------------------------
+//1-18 编写程序，删除每个输入行末尾的空格及制表符，并删除完全是空格的行(为了可视化将空格转换为0，制表符转换为1)
+#include <stdio.h>
+#include <stdlib.h>
+int save_index = 0;
+void copy(char* to, char* from, int len);
+int getline(char* line);
+
+int main() {
+	int len = 0;
+	char* line = (char*)malloc(500 * sizeof(char));
+	char* save_line = (char*)malloc(1000 * sizeof(char));
+	if (line == NULL || save_line == NULL) {
+		printf("Memory allocation failed.");
+			return -1;
+	}
+	int len_tag;
+
+	while ((len = getline(line)) + 1) {
+		if (len == 1)
+			len_tag = 0;
+		else
+			len_tag = 1;
+
+		switch (len_tag) {
+		case 0:
+			continue;
+		case 1:
+			copy(save_line,line,len);			
+		}
+	}
+	save_line[save_index] = '\0';
+	printf("Processed datas: \n");
+	printf("%s", save_line);
+
+	free(line);
+	free(save_line);
+	return 1;
+}
+//获取输入行
+int getline(char *line) {
+	int c = 0;//接受缓冲区输入字符
+	int i = 0;
+	int tag = 0;
+	for (; (c = getchar())!= '\n'; i++) {
+		if (c == EOF)
+			return -1;
+		else if (c == '0' || c == '1')
+			tag++;
+		else 
+			tag = 0;
+		line[i] = c;
+	}
+	if (tag == 0) {
+		line[i++] = '\n';
+		line[i]='\0';
+		return i;
+	}
+	else {
+		line[i - tag] = '\n';
+		line[i - tag + 1] = '\0';
+		return i - tag + 1;
+	}
+}
+//将输入存储到数组中
+void copy(char* to, char* from,int len) {
+	int i;
+	for (i = 0; i < len; i++,save_index++)
+		to[save_index] = from[i];
+}
+
+
