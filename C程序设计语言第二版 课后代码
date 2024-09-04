@@ -513,5 +513,44 @@ void copy(char* to, char* from,int len) {
 	for (i = 0; i < len; i++,save_index++)
 		to[save_index] = from[i];
 }
+---------------------------------------------------------------------------------------------------
+//1-19 编写函数reverse（s），将字符串s中的字符顺序颠倒过来。使用该函数编写一个程序，每次颠倒一个输入行中的字符顺序
+#include <stdio.h>
+#include <stdlib.h>
 
+void reverse(char* r_line, int n);
+int getline(char* line);
 
+int main() {
+	char* line = (char*)malloc(100 * sizeof(char));
+	int len = 0;
+	while ((len = getline(line)) != 0) {
+		printf("reversed datas:\n");
+		reverse(line, len);
+		printf("%s",line);
+	}
+	free(line);
+	return 1;
+}
+
+void reverse(char* r_line, int n) {
+	char temp;
+	int i;
+	for (i = 0; i <= (n-2) / 2; i++) {
+		temp = r_line[i];
+		r_line[i] = r_line[n - i - 2];
+		r_line[n - i - 2] = temp;
+	}
+}
+
+int getline(char* line) {
+	int c, i;
+	for (i = 0; (c = getchar()) != EOF && c != '\n'; i++)
+		line[i] = c;
+	if (c == '\n') {
+		line[i] = '\n';
+		i++;
+	}
+	line[i] = '\0';
+	return i;
+}
