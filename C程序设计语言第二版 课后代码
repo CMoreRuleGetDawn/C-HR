@@ -604,3 +604,62 @@ void replace(char* line_p) {
 或一个空格都能达到下一个制表符终止位时，选哪种替换字符比较好？
 答：如果没有特定的环境或格式要求，使用空格通常是更安全、更一致的选择。这可以确保文本在不同的编辑器和显示设备上保持一致的外观。
 
+//1-21 编写程序entab,将空格串替换为最少数量的制表符和空格，但要保持单词之间的间隔不变。假设制表符终止位的位置与detab程序的情况一样。当使用一个制表符
+//或一个空格都能达到下一个制表符终止位时，选哪种替换字符比较好？
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define tab_fin 8
+
+void replace(char* line_p, char* save);
+
+int main() {
+	char buffer[1000];
+	char save[1000];
+	char* p = save;
+	printf("Enter a line of text: \n");
+	while ((fgets(buffer, sizeof(buffer), stdin)) != NULL) {
+		printf("replaced text: \n");
+		replace(buffer,save,p);
+		printf("%s",save);
+		printf("Enter a line of text: \n");
+	}
+	return 1;
+}
+//空格替换制表符函数
+void replace(char* line_p,char* save,char* p) {
+	int pos = 0;//记录指针指向的位置
+	int num = 0;//记录连续的空格数目
+	int s_num = 0;//计算剩余空格个数
+	//char* p = save;
+	while (line_p[pos] != '\0' && line_p[pos] != EOF) {
+		if (line_p[pos] == ' ') {
+			if (pos % 8 == 7) {
+				*p = '\t';
+				p++;
+				num = 0;
+			}
+			else 
+				num++;
+			
+			pos++;
+		}
+		else {	
+			s_num = num % 8;
+			while (s_num) {
+				*p = '#';//为了方便显示用#替换
+				s_num--;
+				p++;
+			    }
+			*p = line_p[pos];
+			pos++;
+			p++;
+			num = 0;
+			}
+		}
+	*p = '\0';
+}
+
+---------------------------------------------------------------------------------------------------
+1-22
