@@ -554,3 +554,49 @@ int getline(char* line) {
 	line[i] = '\0';
 	return i;
 }
+
+---------------------------------------------------------------------------------------------------
+1-20编写程序datab，将输入中的制表符替换成适当数目的空格，使空格充满到下一个制表符终止位的地方。假设制表符终止位的位置是固定的，比如每隔n列就会出现一个制表符终止位。n应该作为变量还是符号常量呢？
+
+答：根据你的具体需求，你可以选择将 制表符终止位定义为变量或常量。如果你需要更多的灵活性，比如允许用户指定制表符终止位的距离，那么定义为变量可能更合适。
+    如果你希望代码更清晰、易于维护，并且这个值不太可能改变，那么定义为常量是一个好的选择。提问中假设为固定的，那么n设置成符号常量更为适合。
+
+//1-20编写程序datab，将输入中的制表符替换成适当数目的空格，使空格充满到下一个制表符终止位的地方。假设制表符终止位的位置是固定的，比如每隔n列就会出现一个制表符终止位。n应该作为变量还是符号常量呢？
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define tab_fin 4
+
+void replace(char* line_p);
+
+int main() {
+	char buffer[1000];
+	printf("Enter a line of text: \n");
+	while ((fgets(buffer, sizeof(buffer), stdin)) != NULL) {
+		printf("replaced text: \n");
+		replace(buffer);
+		printf("Enter a line of text: \n");
+	}
+	return 1;
+}
+//制表符替换空格函数
+void replace(char* line_p) {
+	int pos = 0;//记录指针指向的位置
+	int num = 0;//记录需要填充的空格数量
+	while (line_p[pos]!='\0'&&line_p[pos]!=EOF) {
+		//pos = pos + 1;
+		if (line_p[pos] == '\t') {
+			num = tab_fin - pos % tab_fin;
+			while (num) {
+				putchar('#');//为了显示方便将空格替换为#
+				num--;
+			}   
+			pos++;
+		}
+		else {
+			putchar(line_p[pos]);
+			pos++;
+		}
+	}
+}
