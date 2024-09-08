@@ -662,4 +662,65 @@ void replace(char* line_p,char* save,char* p) {
 }
 
 ---------------------------------------------------------------------------------------------------
-1-22
+//1-22 编写程序，把较长的输入行“折”成短一些的两行或多行，折行的位置在输入行的第n列之前的最后一个非空格之后。
+//要保证程序能够智能地处理输入行很长以及在指定的列前没有空格或制表符时的情况。
+#include <stdio.h>
+#include <stdlib.h>
+#define cut_lenth 5 //5个字符一段，既第6列之前为折行位置
+
+void getline(char* line);
+void cutline(char* line, char* save);
+
+int main() {
+	char* line = (char*)malloc(500 * sizeof(char));
+	char* save = (char*)malloc(500 * sizeof(char));
+	getline(line);
+	cutline(line,save);
+	printf("%s",save);
+	return 1;
+}
+//获取输入函数
+void getline(char* line) {
+	int c = 0;
+	int n = 0;
+	while ((c = getchar()) != EOF&&c!='\n') {
+		line[n] = c;
+		n++;
+	}
+	if (c == '\n') {
+		line[n] = '\n';
+		n++;
+	}
+	line[n] = '\0';
+}
+//将输入折行函数
+void cutline(char* line, char* save) {
+	int count = 0;//记录字符数目
+	char* linep = line;//原输入数据保存数组
+	char* savep = save;//折行后数据保存数组
+	while (*linep != '\0') {
+		count++;
+		*savep = *linep;
+		if (count == cut_lenth && *linep != ' ' && *linep != '\t') {
+			*(++savep) = '\n';
+			count = 0;
+		}
+		else if (count == cut_lenth && (*linep == ' ' || *linep == '\t')) {
+			while (*linep == ' ' || *linep == '\t') {
+				linep--;
+				savep--;
+			}
+			*(++savep) = '\n';
+			count = 0;
+		}
+		if (count == cut_lenth)
+			count = 0;
+		savep++;
+		linep++;
+		
+	}
+	*savep = '\0';
+
+}
+---------------------------------------------------------------------------------------------------
+
