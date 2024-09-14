@@ -723,4 +723,104 @@ void cutline(char* line, char* save) {
 
 }
 ---------------------------------------------------------------------------------------------------
+//1-23 编写一个删除C语言程序中所有的注释语句。要正确处理带引号的字符串与字符常量。在c语言中，注释不允许嵌套
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TRUE 1
+#define FALSE 0
+
+typedef struct {
+    char men;
+    int inString;
+    int inComment;
+    int sign;
+} each_c;
+
+void init_each_c(each_c* e, char m, int inStr, int inCom, int sg) {
+    e->men = m;
+    e->inString = inStr;
+    e->inComment = inCom;
+    e->sign = sg;
+}
+
+
+int main() {
+    FILE* fp;
+    FILE* new_fp;
+    char* line = (char*)malloc(500 * sizeof(char));
+    each_c c[500];
+    fopen_s(&fp,"resource.txt", "r");
+    if (fp == NULL) {
+        perror("Error opening input file");
+        fclose(fp);
+        return 1;
+    }
+
+    fopen_s(&new_fp,"result.txt", "w");
+    if (new_fp == NULL) {
+        perror("Error opening output file");
+        fclose(new_fp);
+        return 1;
+    }
+
+    int inString = 0;
+    int inComment = 0;
+    int sign = 0;
+    while (fgets(line, 500, fp) != NULL) {
+        char* ptr = line;
+        int n = 0;
+        while (*ptr != '\n'&& *ptr != '\0') {
+            if (*ptr == '"' && !inString) {
+                inString = TRUE;
+            }
+            else if (*ptr == '"' && inString) {
+                inString = FALSE;
+            }
+            if (!inString && *ptr == '/') {
+                if (*(++ptr) == '/') {                
+                    // Skip the comment
+                    init_each_c(&c[n], '\n', FALSE, FALSE, FALSE);
+                    n++;
+                    init_each_c(&c[n], '\0', FALSE, FALSE, FALSE);
+                    break;
+                }
+                else if (*ptr == '*') {
+                    ptr--;
+                    inComment = TRUE; 
+                    sign = TRUE;
+                }
+            }
+            if (inComment && *ptr == '*' && *(ptr+1) == '/') {
+                ptr=ptr+2;
+                inComment = FALSE;
+                sign = FALSE;                               
+                //break;
+            }
+            init_each_c(&c[n], *ptr, inString,inComment , sign);
+            n++;
+            ptr++;
+        }
+        if (*ptr == '\n') {
+            init_each_c(&c[n], '\n', FALSE, FALSE, FALSE);            
+            n++;
+            init_each_c(&c[n], '\0', FALSE, FALSE, FALSE);           
+        }
+        if (*ptr == '\0') {
+            init_each_c(&c[n], '\0', FALSE, FALSE, FALSE);
+        }
+        for (int i = 0; c[i].men != '\0'; i++) {
+            if (c[i].men != '\0' && c[i].inComment == FALSE && c[i].sign == FALSE) {
+                fputc(c[i].men, new_fp);
+            }
+        }
+    }
+
+    free(line);
+    fclose(fp);
+    fclose(new_fp);
+    return 0;
+}
+
+---------------------------------------------------------------------------------------------------
